@@ -83,11 +83,61 @@ int utf8index(const string &s, int widx) {
     return -1;
 }
 
+// 半角文字で数えてn番目の文字のインデックスを返す
+int utf8HBindex(const string &s, int hwidx) {
+    if(hwidx == 0)return 0;
+    
+    size_t i = 0;
+    size_t len = 0;
+    size_t s_size = s.size();
+    unsigned char c;
+    while(i < s_size){
+        c = s[i];
+        if(c == 0x00) i += 0;
+        else if(c < 0x80) {
+            i += 1;
+            len ++;
+            if(len == hwidx) return i;
+            continue;
+        }
+        else if(c < 0xC2) throw logic_error("error");
+        else if(c < 0xE0) i += 2;
+        else if(c < 0xF0) i += 3;
+        else if(c < 0xF8) i += 4;
+        else if(c < 0xFC) i += 5;
+        else if(c < 0xFE) i += 6;
+        else i += 1;
+        len+=2;
+        if(len >= hwidx) return i;
+    }
+    return -1;
+}
+
 // stringのbegin番目の全角文字からbegin+length-1番目の全角文字までのsubstringを返す
 std::string utf8substr(const string &s, int begin, int length) {
     int beginIndex = utf8index(s, begin);
     int endIndex   = utf8index(s, begin+length);
+    if(beginIndex >= s.length())return "";
+    if(endIndex   >= s.length())endIndex = s.length() - 1;
     return s.substr(beginIndex, endIndex-beginIndex);
+}
+
+// stringのbegin番目の全角文字からbegin+length-1番目の全角文字までのsubstringを返す
+std::string utf8HWsubstr(const string &s, int begin, int length) {
+    int beginIndex = utf8HBindex(s, begin);
+    int endIndex   = utf8HBindex(s, begin+length);
+    if(beginIndex >= s.length())return "";
+    if(endIndex   >= s.length())endIndex = s.length() - 1;
+    return s.substr(beginIndex, endIndex-beginIndex);
+}
+
+// 文字列を１行col文字のrow行の文字列に変換する
+std::string createParagraph(const string &s, int col, int row) {
+    string paragraph;
+    for(int idx=0;idx<row;idx++) {
+        paragraph += utf8HWsubstr(s, idx * col, col) + "\n";
+    }
+    return paragraph;
 }
 
 // メッシュに法線ベクトルを自動追加する（TRIANGLESを想定）
