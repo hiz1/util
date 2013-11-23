@@ -15,6 +15,9 @@
 
 using namespace std;
 
+// 文字列を指定文字で分割して返す
+vector<string> split(const string &str, char delim);
+
 // 文字列の長さを全角文字数で数える
 int utf8len(const string &s);
 
@@ -35,6 +38,9 @@ std::string utf8HWsubstr(const string &s, int begin, int length);
 
 // 文字列を１行col文字のrow行の文字列に変換する
 std::string createParagraph(const string &s, int col, int row);
+
+// 文字列をareaに収まる文字列に変換する
+std::string createParagraphByArea(const string &s, const ofPoint &fontSize, const ofPoint &area);
 
 // メッシュに法線ベクトルを自動追加する（TRIANGLESを想定）
 void setNormals(ofMesh &mesh);

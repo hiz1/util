@@ -8,6 +8,18 @@
 
 #include "CommonUtil.h"
 
+// 文字列を指定文字で分割して返す
+vector<string> split(const string &str, char delim){
+    vector<string> res;
+    size_t current = 0, found;
+    while((found = str.find_first_of(delim, current)) != string::npos){
+        res.push_back(string(str, current, found - current));
+        current = found + 1;
+    }
+    res.push_back(string(str, current, str.size() - current));
+    return res;
+}
+
 // 文字列の長さを全角文字数で数える
 int utf8len(const string &s)
 {
@@ -134,10 +146,26 @@ std::string utf8HWsubstr(const string &s, int begin, int length) {
 // 文字列を１行col文字のrow行の文字列に変換する
 std::string createParagraph(const string &s, int col, int row) {
     string paragraph;
-    for(int idx=0;idx<row;idx++) {
-        paragraph += utf8HWsubstr(s, idx * col, col) + "\n";
+    vector<string> rows = split(s, '\n');
+    
+    int rowNum = 0;
+    for(int idx=0;idx<rows.size();idx++) {
+        int rowLength = utf8HWlen(rows[idx]);
+        
+        int colIdx = 0;
+        while(colIdx * col < rowLength) {
+            paragraph += utf8HWsubstr(rows[idx], colIdx * col, col) + "\n";
+            rowNum ++;
+            colIdx ++;
+            if(rowNum >= row)return paragraph;
+        }
     }
     return paragraph;
+}
+
+// 文字列をareaに収まる文字列に変換する
+std::string createParagraphByArea(const string &s, const ofPoint &fontSize, const ofPoint &area) {
+    return createParagraph(s, area.x / fontSize.x * 2, area.y / fontSize.y);
 }
 
 // メッシュに法線ベクトルを自動追加する（TRIANGLESを想定）
