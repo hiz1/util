@@ -15,9 +15,6 @@
 
 using namespace std;
 
-// 文字列を指定文字で分割して返す
-vector<string> split(const string &str, char delim);
-
 // 文字列の長さを全角文字数で数える
 int utf8len(const string &s);
 
