@@ -117,8 +117,8 @@ int utf8HBindex(const string &s, int hwidx) {
 std::string utf8substr(const string &s, int begin, int length) {
     int beginIndex = utf8index(s, begin);
     int endIndex   = utf8index(s, begin+length);
-    if(beginIndex >= s.length())return "";
-    if(endIndex   >= s.length())endIndex = s.length() - 1;
+    if(beginIndex >= s.length() || beginIndex == -1)return "";
+    if(endIndex   >  s.length() || endIndex   == -1)endIndex = s.length();
     return s.substr(beginIndex, endIndex-beginIndex);
 }
 
@@ -126,8 +126,8 @@ std::string utf8substr(const string &s, int begin, int length) {
 std::string utf8HWsubstr(const string &s, int begin, int length) {
     int beginIndex = utf8HBindex(s, begin);
     int endIndex   = utf8HBindex(s, begin+length);
-    if(beginIndex >= s.length())return "";
-    if(endIndex   >= s.length())endIndex = s.length() - 1;
+    if(beginIndex >= s.length() || beginIndex == -1)return "";
+    if(endIndex   >  s.length() || endIndex   == -1)endIndex = s.length();
     return s.substr(beginIndex, endIndex-beginIndex);
 }
 
