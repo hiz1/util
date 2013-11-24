@@ -12,7 +12,7 @@
 #include "ofMain.h"
 
 // Textureを予め割り当てておけば自動でテクスチャを表示するPlane
-class TexturePlane : ofPlanePrimitive {
+class TexturePlane : public ofPlanePrimitive {
 public:
     void setTexturePointer(ofTexture *texture);
     void draw();
