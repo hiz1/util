@@ -15,8 +15,7 @@ void TexturePlane::setTexturePointer(ofTexture *texture) {
 }
 
 void TexturePlane::draw() {
-    if(texture != NULL) {
-        texture->bind();
-        ofPlanePrimitive::draw();
-    }
+    if(texture != NULL) texture->bind();
+    ofPlanePrimitive::draw();
+    if(texture != NULL) texture->unbind();
 }
